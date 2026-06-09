@@ -1,14 +1,10 @@
-from gradle:7.5-jdk17 as build
+FROM gradle:8.14-jdk17 AS build
 WORKDIR /app
 COPY . .
-run gradle build --no-daemon
+RUN gradle build --no-daemon -x test
 
 FROM eclipse-temurin:17-jdk
-
 WORKDIR /app
-
 COPY --from=build /app/build/libs/*.jar /app/notificacao.jar
-
-EXPOSE 8083
-
+EXPOSE 8082
 CMD ["java", "-jar", "/app/notificacao.jar"]
